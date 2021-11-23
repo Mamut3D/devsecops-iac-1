@@ -35,7 +35,7 @@ jobs:
           scope: subscription
           deploymentName: ${{ env.resource_group_name }}
           region: westeurope
-          subscriptionId: $ {{ env.subscriptionId}}
+          subscriptionId: 89c3d36a-668d-4d48-a162-830795de0c48
           template: ./arm-templates/resourcegroup.json
 
       - name: Deploy storage account
