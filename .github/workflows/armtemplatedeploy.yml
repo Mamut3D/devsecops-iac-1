@@ -3,14 +3,12 @@ name: armTemplateDeployment
 on:
   push:
     branches:
-        - main
-
+      - main
   workflow_dispatch:
-  
-env:
-  reource_group_name: rg-githubactions
-  subscriptionId: 89c3d36a-668d-4d48-a162-830795de0c48
 
+env:
+  resource_group_name: rg-githubactions
+  subscriptionId: 89c3d36a-668d-4d48-a162-830795de0c48
 
 jobs:
   armDeploy:
@@ -23,6 +21,7 @@ jobs:
         uses: Azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+
 
       - name: Azure deploy ARM template
         uses: Azure/cli@v1
