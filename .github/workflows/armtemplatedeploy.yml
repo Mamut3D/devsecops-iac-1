@@ -63,15 +63,11 @@ jobs:
           inlinescript: |
             az keyvault secret set -n "ADMINPASSWORD" --vault-name "keyvault-githubactions2" --value "Heslo123."
 
-      - uses: Azure/get-keyvault-secrets@v1
+      - name: Azure key vault - Get Secrets
+        uses: Azure/get-keyvault-secrets@v1
         with:
           keyvault: "keyvault-githubactions2"
           secrets: 'ADMINPASSWORD'
-        id: myGetSecretAction
-      
-      - run: echo ${{ steps.myGetSecretAction.outputs.ADMINPASSWORD}}
-      
-      # - uses: Azure/docker-login@v1
-      #   with:
-      #     login-server: mycontainer.azurecr.io
-      #     username: ${{ steps.myGetSecretAction.outputs.ADMINPASSWORD }}
+        id: getAzureKeyVaultSecrets
+
+      - run: echo ${{ steps.getAzureKeyvaultSecrets.outputs.ADMINPASSWORD}}
