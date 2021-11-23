@@ -45,7 +45,6 @@ jobs:
           template: ./arm-templates/storageaccount.json
           parameters: ./arm-templates/storageaccount.parameters.json
           deploymentMode: incremental
-
           
       - name: Deploy VM
         uses: Azure/arm-deploy@v1
@@ -57,3 +56,9 @@ jobs:
           parameters: 
             adminPassword=${{ secrets.ADMIN_PASSWORD }}
           deploymentMode: incremental
+
+      - name: Set secret
+        uses: Azure/cli@1.0.4
+        with:
+          inlinescript: |
+            az keyvault secret set -n "ADMINPASSWORD" --vault-name "keyvault-githubactions2" --value "Heslo123."
