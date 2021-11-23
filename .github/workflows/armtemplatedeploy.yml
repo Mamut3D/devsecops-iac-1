@@ -56,5 +56,4 @@ jobs:
           template: ./arm-templates/virtualmachine.json
           parameters: 
             adminPassword=${{ secrets.ADMIN_PASSWORD }}
-            location="${{ env.location }}"
           deploymentMode: incremental
