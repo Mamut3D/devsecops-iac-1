@@ -13,7 +13,7 @@ env:
 
 jobs:
   armDeployStaging:
-    name: Deploy to Production
+    name: Deploy to Staging
     runs-on: ubuntu-latest
     env:
       resource_group_name: rg-stg-githubactions
@@ -48,7 +48,10 @@ jobs:
           resourceGroupName: ${{ env.resource_group_name }}
           subscriptionId: ${{ env.subscriptionId }}
           template: ./arm-templates/storageaccount.json
-          parameters: ./arm-templates/storageaccount.parameters.json
+          parameters:
+            sku=Standard_LRS
+            storageAccountName=globostg002
+            location="${{ env.location }}"
           deploymentMode: incremental
           
       - name: Deploy VM
@@ -113,7 +116,10 @@ jobs:
           resourceGroupName: ${{ env.resource_group_name }}
           subscriptionId: ${{ env.subscriptionId }}
           template: ./arm-templates/storageaccount.json
-          parameters: ./arm-templates/storageaccount.parameters.json
+          parameters: 
+              sku=Standard_LRS
+              storageAccountName=globostg003
+              location="${{ env.location }}"
           deploymentMode: incremental
           
       - name: Deploy VM
