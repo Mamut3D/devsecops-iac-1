@@ -6,6 +6,10 @@ on:
         - main
 
   workflow_dispatch:
+env:
+  reource_group_name: rg-githubactions
+  subscriptionId: 89c3d36a-668d-4d48-a162-830795de0c48
+
 
 jobs:
   armDeploy:
@@ -29,9 +33,9 @@ jobs:
         uses: Azure/arm-deploy@v1
         with:
           scope: subscription
-          deploymentName: rg-githubactions
+          deploymentName: ${{ env.resource_group_name }}
           region: westeurope
-          subscriptionId: 89c3d36a-668d-4d48-a162-830795de0c48
+          subscriptionId: $ {{ env.subscriptionId}}
           template: ./arm-templates/resourcegroup.json
 
       - name: Deploy storage account
@@ -39,9 +43,9 @@ jobs:
         id: storageAccountDeploy
         with:
           scope: resourcegroup
-          resourceGroupName: rg-githubactions
+          resourceGroupName: ${{ env.resource_group_name }}
           region: westeurope
-          subscriptionId: 89c3d36a-668d-4d48-a162-830795de0c48
+          subscriptionId: $ {{ env.subscriptionId}}
           template: ./arm-templates/storageaccount.json
           parameters: ./arm-templates/storageaccount.parameters.json
           deploymentMode: incremental
@@ -51,9 +55,9 @@ jobs:
         uses: Azure/arm-deploy@v1
         with:
           scope: resourcegroup
-          resourceGroupName: rg-githubactions
+          resourceGroupName: ${{ env.resource_group_name }}
           region: westeurope
-          subscriptionId: 89c3d36a-668d-4d48-a162-830795de0c48
+          subscriptionId: $ {{ env.subscriptionId}}
           template: ./arm-templates/virtualmachine.json
           parameters:
             adminPassword=${{ secrets.ADMIN_PASSWORD }}
@@ -63,4 +67,4 @@ jobs:
         uses: Azure/cli@1.0.4
         with:
           inlinescript: |
-            az keyvault create --name "keyvault-githubactions2" --resource-group "rg-githubactions" --location "japanwest"
+            az keyvault create --name "keyvault-githubactions2" --resource-group "${{ env.resource_grou_name }}" --location "japanwest"
