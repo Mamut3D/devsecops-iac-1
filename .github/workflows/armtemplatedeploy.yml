@@ -9,6 +9,7 @@ on:
 env:
   resource_group_name: rg-githubactions
   subscriptionId: 89c3d36a-668d-4d48-a162-830795de0c48
+  location: Australia East
 
 jobs:
   armDeploy:
@@ -22,21 +23,17 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-
-      - name: Azure deploy ARM template
-        uses: Azure/cli@v1
-        with:
-          inlinescript: |
-            az deployment sub create --location "westeurope" --template-file ./arm-templates/resourcegroup.json
-
-      - name: Deploy resource group
+      - name: Deploy Resource Group ${{ env.resource_group_name }}
         uses: Azure/arm-deploy@v1
         with:
           scope: subscription
-          deploymentName: ${{ env.resource_group_name }}
-          region: westeurope
-          subscriptionId: 89c3d36a-668d-4d48-a162-830795de0c48
+          subscriptionId: ${{ env.subscriptionId }}
+          region: "${{ env.location }}"
           template: ./arm-templates/resourcegroup.json
+          parameters:
+            location="${{ env.location }}"
+            resourceGroupName=${{ env.resource_group_name }}
+          deploymentName: ${{ env.resource_group_name }}
 
       - name: Deploy storage account
         uses: Azure/arm-deploy@v1
@@ -44,8 +41,7 @@ jobs:
         with:
           scope: resourcegroup
           resourceGroupName: ${{ env.resource_group_name }}
-          region: westeurope
-          subscriptionId: 89c3d36a-668d-4d48-a162-830795de0c48
+          subscriptionId: ${{ env.subscriptionId }}
           template: ./arm-templates/storageaccount.json
           parameters: ./arm-templates/storageaccount.parameters.json
           deploymentMode: incremental
@@ -56,15 +52,9 @@ jobs:
         with:
           scope: resourcegroup
           resourceGroupName: ${{ env.resource_group_name }}
-          region: westeurope
-          subscriptionId: 89c3d36a-668d-4d48-a162-830795de0c48
+          subscriptionId: ${{ env.subscriptionId }}
           template: ./arm-templates/virtualmachine.json
-          parameters:
+          parameters: 
             adminPassword=${{ secrets.ADMIN_PASSWORD }}
+            location="${{ env.location }}"
           deploymentMode: incremental
-
-      - name: Set secret
-        uses: Azure/cli@1.0.4
-        with:
-          inlinescript: |
-            az keyvault secret set -n "ADMINPASSWORD" --vault-name "keyvault-githubactions2" --value "Heslo123."
