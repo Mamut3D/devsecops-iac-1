@@ -8,7 +8,7 @@ on:
 
 env:
   resource_group_name: rg-githubactions
-  subscriptionId: 89c3d36a-668d-4d48-a162-830795de0c48
+  subscriptionId: df005213-0214-4cc9-85fd-0cca43658bdd
   location: westeurope
 
 jobs:
@@ -53,7 +53,7 @@ jobs:
             storageAccountName=globostg002
             location="${{ env.location }}"
           deploymentMode: incremental
-          
+
       - name: Deploy VM
         uses: Azure/arm-deploy@v1
         with:
@@ -61,7 +61,7 @@ jobs:
           resourceGroupName: ${{ env.resource_group_name }}
           subscriptionId: ${{ env.subscriptionId }}
           template: ./arm-templates/virtualmachine.json
-          parameters: 
+          parameters:
             adminPassword=${{ secrets.ADMIN_PASSWORD }}
           deploymentMode: incremental
 
@@ -80,7 +80,7 @@ jobs:
 
       - run: echo ${{ steps.getAzureKeyvaultSecrets.outputs.ADMINPASSWORD}}
 
-      
+
   armDeployProduction:
     name: Deploy to Production
     runs-on: ubuntu-latest
@@ -116,12 +116,12 @@ jobs:
           resourceGroupName: ${{ env.resource_group_name }}
           subscriptionId: ${{ env.subscriptionId }}
           template: ./arm-templates/storageaccount.json
-          parameters: 
+          parameters:
               sku=Standard_LRS
               storageAccountName=globostg003
               location="${{ env.location }}"
           deploymentMode: incremental
-          
+
       - name: Deploy VM
         uses: Azure/arm-deploy@v1
         with:
@@ -129,7 +129,7 @@ jobs:
           resourceGroupName: ${{ env.resource_group_name }}
           subscriptionId: ${{ env.subscriptionId }}
           template: ./arm-templates/virtualmachine.json
-          parameters: 
+          parameters:
             adminPassword=${{ secrets.ADMIN_PASSWORD }}
           deploymentMode: incremental
 
