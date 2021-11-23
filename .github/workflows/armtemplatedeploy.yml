@@ -6,6 +6,7 @@ on:
         - main
 
   workflow_dispatch:
+  
 env:
   reource_group_name: rg-githubactions
   subscriptionId: 89c3d36a-668d-4d48-a162-830795de0c48
