@@ -59,8 +59,8 @@ jobs:
             adminPassword=${{ secrets.ADMIN_PASSWORD }}
           deploymentMode: incremental
 
-      - name: Deploy Azure KeyVault
-        uses: Azure/cli@v1
+      - name: Deploy Key Vault
+        uses: Azure/cli@1.0.4
         with:
-          inclinescript: |
+          inlinescript: |
             az keyvault create --name "keyvault-githubactions" --resource-group "rg-githubactions" --location "Australia West"
